@@ -1,0 +1,59 @@
+{
+  "$schema": "Indice de assets de CafeVeloz. Actualizar al agregar/modificar/eliminar assets.",
+  "assets": [
+    {
+      "id": "coffee_cup",
+      "description": "Taza de cafe — widget flotante draggable",
+      "category": "widget",
+      "files": [
+        { "path": "coffee_cup.png", "size": "180x180", "scale": "1x" },
+        { "path": "coffee_cup@2x.png", "size": "360x360", "scale": "2x" }
+      ],
+      "loaded_by": "Bundle.module.url(forResource:withExtension:)",
+      "used_in": ["CoffeeWidgetView.swift"],
+      "states": {
+        "running": { "saturation": 1.0, "brightness": 0, "opacity": 1.0 },
+        "stopped": { "saturation": 0.3, "brightness": -0.08, "opacity": 0.4 }
+      },
+      "source": "~/Downloads/diegohabano.png",
+      "generated_by": "scripts/remove_bg_floodfill.py"
+    },
+    {
+      "id": "app_icon",
+      "description": "Icono de la app — mismo arte que el widget en todas las resoluciones macOS",
+      "category": "app_icon",
+      "files": [
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_16.png", "size": "16x16", "scale": "1x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_16@2x.png", "size": "32x32", "scale": "2x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_32.png", "size": "32x32", "scale": "1x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_32@2x.png", "size": "64x64", "scale": "2x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_128.png", "size": "128x128", "scale": "1x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_128@2x.png", "size": "256x256", "scale": "2x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_256.png", "size": "256x256", "scale": "1x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_256@2x.png", "size": "512x512", "scale": "2x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_512.png", "size": "512x512", "scale": "1x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_512@2x.png", "size": "1024x1024", "scale": "2x" },
+        { "path": "Assets.xcassets/AppIcon.appiconset/icon_1024.png", "size": "1024x1024", "scale": "1x" }
+      ],
+      "loaded_by": "install.sh (iconutil -c icns)",
+      "used_in": ["install.sh", "scripts/build_desktop_app.sh"],
+      "states": null,
+      "source": "~/Downloads/diegohabano.png",
+      "generated_by": "scripts/remove_bg_floodfill.py (inline icon generation)"
+    },
+    {
+      "id": "statusbar_icon",
+      "description": "Icono de la barra de menu — SF Symbols del sistema",
+      "category": "system_symbol",
+      "files": [],
+      "loaded_by": "NSImage(systemSymbolName:)",
+      "used_in": ["AppDelegate.swift"],
+      "states": {
+        "running": { "symbol": "cup.and.saucer.fill" },
+        "stopped": { "symbol": "cup.and.saucer" }
+      },
+      "source": "Apple SF Symbols",
+      "generated_by": null
+    }
+  ]
+}
