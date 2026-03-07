@@ -1,57 +1,57 @@
 # CafeVeloz
 
-App de menu bar para macOS que mantiene la Mac despierta usando `caffeinate -di`. Widget flotante con taza de cafe como indicador visual.
+macOS menu bar app that keeps your Mac awake using `caffeinate -di`. Floating coffee cup widget as visual indicator.
 
-## Idioma
+## Language
 
-UI en español. Codigo y comentarios en ingles.
+All code, comments, and UI in English.
 
-## Arquitectura
+## Architecture
 
 ```
 Sources/CafeVeloz/
-  Core/       — Logica de negocio (protocolos + DI)
-    CaffeinateController.swift   — Controlador principal (start/stop/toggle)
-    CaffeinateProcessLaunching.swift — Protocolo para inyeccion de proceso
-    SoundPlayer.swift            — Protocolo + impl para sonidos toggle
-    AutoOffTimer.swift           — Timer auto-apagado con presets
-  UI/         — Vista (SwiftUI + AppKit)
-    CoffeeWidgetView.swift       — Widget flotante draggable
-    WindowAccessor.swift         — Helper para acceder al NSWindow desde SwiftUI
-  App/        — Ciclo de vida
+  Core/       — Business logic (protocols + DI)
+    CaffeinateController.swift   — Main controller (start/stop/toggle)
+    CaffeinateProcessLaunching.swift — Protocol for process injection
+    SoundPlayer.swift            — Protocol + impl for toggle sounds
+    AutoOffTimer.swift           — Auto-off timer with presets
+  UI/         — View layer (SwiftUI + AppKit)
+    CoffeeWidgetView.swift       — Floating draggable widget
+    WindowAccessor.swift         — Helper to access NSWindow from SwiftUI
+  App/        — Lifecycle
     AppDelegate.swift            — Menu bar, window config, login item
     CafeVelozApp.swift           — Entry point
-  Resources/  — PNG assets + xcassets para icono
+  Resources/  — PNG assets + xcassets for app icon
 ```
 
-## Build y test
+## Build and test
 
 ```bash
 swift test                    # 22 tests
 swift build                   # Debug build
 swift build -c release        # Release build
-bash scripts/pipeline.sh      # Test + build + empaquetado en dist/CafeVeloz.app
-bash install.sh               # Instalar en ~/Applications
+bash scripts/pipeline.sh      # Test + build + package into dist/CafeVeloz.app
+bash install.sh               # Install to ~/Applications
 ```
 
 ## Tests
 
-- Fakes en test files: `FakeProcess`, `MuteSoundPlayer`, `FakeTimerProvider`
-- Tests son `@MainActor` porque `CaffeinateController` lo es
-- No requieren UI ni permisos especiales
+- Fakes in test files: `FakeProcess`, `MuteSoundPlayer`, `FakeTimerProvider`
+- Tests are `@MainActor` because `CaffeinateController` is
+- No UI or special permissions required
 
-## Convenciones
+## Conventions
 
-- `@MainActor` en clases que tocan UI o estado compartido
-- Protocolos `Sendable` para inyeccion de dependencias
-- PNG assets directos en Resources/ con variantes @2x (SPM no compila .car)
-- xcassets solo para app icon (se convierte a .icns en install.sh)
+- `@MainActor` on classes that touch UI or shared state
+- `Sendable` protocols for dependency injection
+- PNG assets directly in Resources/ with @2x variants (SPM can't compile .car)
+- xcassets only for app icon (converted to .icns in install.sh)
 - Widget position persisted via UserDefaults (`widgetX`, `widgetY`)
 - Login item via `SMAppService.mainApp` (macOS 13+)
-- Drag usa `NSEvent.mouseLocation` (screen coords) para evitar feedback loop de SwiftUI
+- Drag uses `NSEvent.mouseLocation` (screen coords) to avoid SwiftUI feedback loop
 
-## Plataforma
+## Platform
 
-- macOS 14+ (`.macOS(.v14)` en Package.swift)
+- macOS 14+ (`.macOS(.v14)` in Package.swift)
 - Swift 6.0 (strict concurrency)
 - SPM (no Xcode project)

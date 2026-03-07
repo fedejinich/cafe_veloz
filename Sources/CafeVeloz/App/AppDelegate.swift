@@ -53,10 +53,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(.separator())
 
         // Auto-off submenu
-        let autoOffItem = NSMenuItem(title: "Auto-apagar", action: nil, keyEquivalent: "")
+        let autoOffItem = NSMenuItem(title: "Auto-off", action: nil, keyEquivalent: "")
         let submenu = NSMenu()
         for hours in AutoOffTimer.presetHours {
-            let title = hours == 0 ? "Desactivado" : "\(hours)h"
+            let title = hours == 0 ? "Disabled" : "\(hours)h"
             let menuItem = NSMenuItem(
                 title: title,
                 action: #selector(selectAutoOff(_:)),
@@ -73,7 +73,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(.separator())
 
         let loginItem = NSMenuItem(
-            title: "Abrir al iniciar sesion",
+            title: "Launch at Login",
             action: #selector(toggleLoginItem(_:)),
             keyEquivalent: ""
         )
@@ -165,8 +165,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             accessibilityDescription: "Cafe Veloz"
         )
         statusItem?.button?.imagePosition = controller.autoOffTimer.isActive ? .imageLeading : .imageOnly
-        toggleMenuItem?.title = controller.isRunning ? "Apagar Cafe Veloz" : "Prender Cafe Veloz"
-        visibilityMenuItem?.title = isCoffeeVisible ? "Ocultar Cafe" : "Mostrar Cafe"
+        toggleMenuItem?.title = controller.isRunning ? "Turn Off Cafe Veloz" : "Turn On Cafe Veloz"
+        visibilityMenuItem?.title = isCoffeeVisible ? "Hide Coffee" : "Show Coffee"
         refreshStatusBarTitle()
         refreshAutoOffChecks()
     }
