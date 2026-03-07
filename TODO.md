@@ -2,19 +2,19 @@
 
 ## MVP Cafe Veloz
 
-- [x] Crear app menubar nativa macOS 14+ con SwiftUI.
-- [x] Implementar controlador de proceso para `caffeinate -di`.
-- [x] Implementar UI taza flotante (sin recuadro), arrastrable, con toggle Prender/Apagar en click.
-- [x] Cambiar icono de barra según estado prendido/apagado.
-- [x] Forzar apagado de `caffeinate` al salir (`Quit`).
-- [x] Agregar tests unitarios para flujo start/stop/toggle/fallo/salida inesperada.
-- [x] Actualizar documentación de uso en `README.md`.
-- [x] Agregar pipeline local de trabajo (`scripts/pipeline.sh`) con test + build + empaquetado en `dist/CafeVeloz.app`.
-- [x] Agregar acción Mostrar/Ocultar para la taza flotante y mejorar su silueta visual.
-- [x] Ajustar taza flotante a estilo icono (sin texto en el widget, solo estado visual on/off).
+- [x] Create native macOS 14+ menu bar app with SwiftUI.
+- [x] Implement process controller for `caffeinate -di`.
+- [x] Implement floating cup UI (borderless), draggable, with on/off toggle on click.
+- [x] Change status bar icon based on running/stopped state.
+- [x] Force-stop `caffeinate` on quit.
+- [x] Add unit tests for start/stop/toggle/failure/unexpected exit flow.
+- [x] Update usage documentation in `README.md`.
+- [x] Add local pipeline (`scripts/pipeline.sh`) with test + build + packaging into `dist/CafeVeloz.app`.
+- [x] Add show/hide action for the floating cup and improve its visual silhouette.
+- [x] Adjust floating cup to icon style (no text in widget, visual on/off state only).
 
-## Fuera de alcance MVP
+## Beyond MVP
 
-- [x] Autoarranque al iniciar sesión.
-- [ ] Configuración de flags de `caffeinate`.
-- [ ] Empaquetado y firma para distribución.
+- [x] Launch at login.
+- [ ] Configurable `caffeinate` flags.
+- [ ] Packaging and signing for distribution.

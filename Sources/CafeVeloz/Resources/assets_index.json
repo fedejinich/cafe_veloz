@@ -1,9 +1,9 @@
 {
-  "$schema": "Indice de assets de CafeVeloz. Actualizar al agregar/modificar/eliminar assets.",
+  "$schema": "CafeVeloz asset index. Update when adding/modifying/removing assets.",
   "assets": [
     {
       "id": "coffee_cup",
-      "description": "Taza de cafe — widget flotante draggable",
+      "description": "Coffee cup — floating draggable widget",
       "category": "widget",
       "files": [
         { "path": "coffee_cup.png", "size": "180x180", "scale": "1x" },
@@ -20,7 +20,7 @@
     },
     {
       "id": "app_icon",
-      "description": "Icono de la app — mismo arte que el widget en todas las resoluciones macOS",
+      "description": "App icon — same art as the widget in all macOS resolutions",
       "category": "app_icon",
       "files": [
         { "path": "Assets.xcassets/AppIcon.appiconset/icon_16.png", "size": "16x16", "scale": "1x" },
@@ -43,7 +43,7 @@
     },
     {
       "id": "statusbar_icon",
-      "description": "Icono de la barra de menu — SF Symbols del sistema",
+      "description": "Menu bar icon — system SF Symbols",
       "category": "system_symbol",
       "files": [],
       "loaded_by": "NSImage(systemSymbolName:)",

@@ -3,20 +3,20 @@
   <br>Cafe Veloz
 </h1>
 
-<p align="center">App de menu bar para macOS que mantiene tu Mac despierta usando <code>caffeinate -di</code>.<br>Un widget flotante con la taza de Cafe Veloz como indicador visual.</p>
+<p align="center">macOS menu bar app that keeps your Mac awake using <code>caffeinate -di</code>.<br>A floating widget with the Cafe Veloz cup as visual indicator.</p>
 
-## Funcionalidades
+## Features
 
-- **Widget flotante** — Taza de cafe draggable que se puede mover a cualquier posicion de la pantalla. Sin bordes, sin ventana, solo la taza.
-- **Toggle con click** — Un click en la taza alterna entre prendido (opaco, colores saturados) y apagado (translucido, desaturado).
-- **Doble click** — Oculta/muestra el widget.
-- **Menu bar** — Icono en la barra superior con menu para controlar el cafe, visibilidad del widget, auto-apagado, y login item.
-- **Auto-apagado** — Presets de 1h, 2h, 4h, 8h con countdown visible en el widget y la barra de menu.
-- **Abrir al iniciar sesion** — Registro como login item via `SMAppService`.
-- **Sonidos** — Feedback auditivo al prender/apagar (Purr/Tink del sistema).
-- **Posicion persistente** — La posicion del widget se guarda en `UserDefaults` y se restaura al reabrir.
+- **Floating widget** — Draggable coffee cup that can be moved anywhere on screen. No borders, no window chrome, just the cup.
+- **Click to toggle** — A single click toggles between on (opaque, saturated colors) and off (translucent, desaturated).
+- **Double click** — Hides/shows the widget.
+- **Menu bar** — Status bar icon with menu to control caffeinate, widget visibility, auto-off timer, and login item.
+- **Auto-off** — Presets of 1h, 2h, 4h, 8h with countdown visible in the widget and menu bar.
+- **Launch at login** — Registered as login item via `SMAppService`.
+- **Sounds** — Audible feedback on toggle (system Purr/Tink sounds).
+- **Persistent position** — Widget position is saved to `UserDefaults` and restored on relaunch.
 
-## Requisitos
+## Requirements
 
 - macOS 14+
 - Swift 6.0+ / Xcode 16.2+
@@ -34,25 +34,25 @@ swift build -c release        # Release
 swift test                    # 22 tests
 ```
 
-Los tests usan inyeccion de dependencias con fakes (`FakeProcess`, `MuteSoundPlayer`, `FakeTimerProvider`). No requieren UI ni permisos especiales.
+Tests use dependency injection with fakes (`FakeProcess`, `MuteSoundPlayer`, `FakeTimerProvider`). No UI or special permissions required.
 
-## Instalar
+## Install
 
 ```bash
 bash install.sh
 ```
 
-Genera `CafeVeloz.app` en `~/Applications/` con icono, `Info.plist`, y firma ad-hoc. Tambien copia a `/Applications/` si existia una version previa.
+Generates `CafeVeloz.app` in `~/Applications/` with icon, `Info.plist`, and ad-hoc signature. Also copies to `/Applications/` if a previous version existed.
 
 ## Pipeline
 
 ```bash
-bash scripts/pipeline.sh      # Test + build release + empaquetado en dist/
+bash scripts/pipeline.sh      # Test + release build + package into dist/
 ```
 
-CI con GitHub Actions: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+CI with GitHub Actions: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
 
-## Arquitectura
+## Architecture
 
 ```
 Sources/CafeVeloz/
@@ -60,13 +60,13 @@ Sources/CafeVeloz/
     CafeVelozApp.swift               Entry point (@main)
     AppDelegate.swift                 Menu bar, window config, login item
   Core/
-    CaffeinateController.swift        Controlador principal (start/stop/toggle)
-    CaffeinateProcessLaunching.swift  Protocolo para inyeccion de proceso
-    SoundPlayer.swift                 Protocolo + impl para sonidos
-    AutoOffTimer.swift                Timer auto-apagado con presets
+    CaffeinateController.swift        Main controller (start/stop/toggle)
+    CaffeinateProcessLaunching.swift  Protocol for process injection
+    SoundPlayer.swift                 Protocol + impl for toggle sounds
+    AutoOffTimer.swift                Auto-off timer with presets
   UI/
-    CoffeeWidgetView.swift            Widget flotante draggable (SwiftUI)
-    WindowAccessor.swift              NSViewRepresentable para acceso a NSWindow
+    CoffeeWidgetView.swift            Floating draggable widget (SwiftUI)
+    WindowAccessor.swift              NSViewRepresentable for NSWindow access
   Resources/
     coffee_cup.png                    Widget 1x (180x180)
     coffee_cup@2x.png                 Widget 2x (360x360)
@@ -78,21 +78,21 @@ Tests/CafeVelozTests/
   SoundPlayerTests.swift              4 tests  — sound call counting
 ```
 
-## Decisiones tecnicas
+## Technical decisions
 
-- **SPM puro** — Sin Xcode project. El `.app` bundle se arma manualmente en `install.sh`.
-- **Swift 6 strict concurrency** — `@MainActor` en clases que tocan UI/estado, protocolos `Sendable` para DI.
-- **PNG directo en Resources/** — SPM no compila `.car` (Asset Catalogs) correctamente; los PNGs se cargan via `Bundle.module`.
-- **Drag via `NSEvent.mouseLocation`** — Coordenadas de pantalla absolutas para drag smooth sin feedback loop de SwiftUI.
-- **`caffeinate -di`** — Flag `-d` previene display sleep, `-i` previene idle sleep.
-- **`LSUIElement = true`** — La app no aparece en el Dock, solo en la barra de menu.
+- **Pure SPM** — No Xcode project. The `.app` bundle is assembled manually in `install.sh`.
+- **Swift 6 strict concurrency** — `@MainActor` on classes touching UI/state, `Sendable` protocols for DI.
+- **PNGs directly in Resources/** — SPM doesn't compile `.car` (Asset Catalogs) correctly; PNGs are loaded via `Bundle.module`.
+- **Drag via `NSEvent.mouseLocation`** — Absolute screen coordinates for smooth drag without SwiftUI feedback loop.
+- **`caffeinate -di`** — `-d` flag prevents display sleep, `-i` prevents idle sleep.
+- **`LSUIElement = true`** — App doesn't appear in the Dock, only in the menu bar.
 
-## Regenerar assets
+## Regenerate assets
 
-Si necesitas regenerar los PNGs del widget y el icono desde la imagen fuente:
+To regenerate widget PNGs and app icon from the source image:
 
 ```bash
-python3 scripts/remove_bg_floodfill.py    # Requiere Pillow
+python3 scripts/remove_bg_floodfill.py    # Requires Pillow
 ```
 
-Este script usa flood fill desde los bordes (no threshold global) para remover el fondo negro preservando pixeles oscuros interiores (cafe, sombras, texto). Detecta y remueve el hueco de la manija automaticamente.
+This script uses flood fill from edges (not global threshold) to remove the black background while preserving dark interior pixels (coffee, shadows, text). It automatically detects and removes the handle gap.

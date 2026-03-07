@@ -9,16 +9,16 @@ BIN_DIR="${CONTENTS_DIR}/MacOS"
 BIN_PATH="${BIN_DIR}/${APP_NAME}"
 INFO_PLIST_PATH="${CONTENTS_DIR}/Info.plist"
 
-echo "[build] Compilando binario release..."
+echo "[build] Compiling release binary..."
 swift build -c release --product "${APP_NAME}"
 RELEASE_BIN="$(swift build -c release --show-bin-path)/${APP_NAME}"
 
 if [[ ! -x "${RELEASE_BIN}" ]]; then
-  echo "[build] Error: no se encontro binario release en ${RELEASE_BIN}" >&2
+  echo "[build] Error: release binary not found at ${RELEASE_BIN}" >&2
   exit 1
 fi
 
-echo "[build] Regenerando bundle .app en dist/..."
+echo "[build] Regenerating .app bundle in dist/..."
 rm -rf "${APP_BUNDLE}"
 mkdir -p "${BIN_DIR}"
 cp "${RELEASE_BIN}" "${BIN_PATH}"
@@ -27,7 +27,7 @@ chmod +x "${BIN_PATH}"
 # Copy the resource bundle if it exists
 RESOURCE_BUNDLE="$(swift build -c release --show-bin-path)/CafeVeloz_CafeVeloz.bundle"
 if [[ -d "${RESOURCE_BUNDLE}" ]]; then
-  echo "[build] Copiando resource bundle..."
+  echo "[build] Copying resource bundle..."
   cp -R "${RESOURCE_BUNDLE}" "${BIN_DIR}/"
 fi
 
@@ -63,7 +63,7 @@ cat > "${INFO_PLIST_PATH}" <<'PLIST'
 PLIST
 
 if command -v codesign >/dev/null 2>&1; then
-  echo "[build] Firmando ad-hoc..."
+  echo "[build] Signing ad-hoc..."
   codesign --force --sign - --timestamp=none "${APP_BUNDLE}"
 fi
 
