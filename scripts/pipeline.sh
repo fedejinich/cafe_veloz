@@ -9,7 +9,8 @@ echo "[pipeline] 1/3 Validating assets..."
 "${ROOT_DIR}/scripts/validate_assets.sh"
 
 echo "[pipeline] 2/3 Running tests..."
-swift test
+CLANG_MODULE_CACHE_PATH="${ROOT_DIR}/.build/ModuleCache" \
+  swift test --disable-sandbox
 
 echo "[pipeline] 3/3 Building desktop app..."
 "${ROOT_DIR}/scripts/build_desktop_app.sh"

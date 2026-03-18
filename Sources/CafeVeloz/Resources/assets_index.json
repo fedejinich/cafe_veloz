@@ -9,7 +9,7 @@
         { "path": "coffee_cup.png", "size": "180x180", "scale": "1x" },
         { "path": "coffee_cup@2x.png", "size": "360x360", "scale": "2x" }
       ],
-      "loaded_by": "Bundle.module.url(forResource:withExtension:)",
+      "loaded_by": "Bundle.main.resourceURL first, Bundle.module fallback",
       "used_in": ["CoffeeWidgetView.swift"],
       "states": {
         "running": { "saturation": 1.0, "brightness": 0, "opacity": 1.0 },

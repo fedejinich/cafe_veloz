@@ -14,12 +14,21 @@ struct CoffeeWidgetView: View {
     private let widgetSize = CGSize(width: 180, height: 180)
 
     private var coffeeCupImage: NSImage? {
-        guard let url = Bundle.module.url(forResource: "coffee_cup@2x", withExtension: "png"),
+        guard let url = coffeeCupImageURL(),
               let img = NSImage(contentsOf: url) else {
             return nil
         }
         img.size = NSSize(width: 180, height: 180)
         return img
+    }
+
+    private func coffeeCupImageURL() -> URL? {
+        if let mainResourceURL = Bundle.main.resourceURL?.appendingPathComponent("coffee_cup@2x.png"),
+           FileManager.default.fileExists(atPath: mainResourceURL.path) {
+            return mainResourceURL
+        }
+
+        return Bundle.module.url(forResource: "coffee_cup@2x", withExtension: "png")
     }
 
     var body: some View {
@@ -45,7 +54,7 @@ struct CoffeeWidgetView: View {
         .contentShape(Rectangle())
         .background(WindowAccessor(window: $window))
         .gesture(dragGesture)
-.onTapGesture(count: 2) {
+        .onTapGesture(count: 2) {
             NotificationCenter.default.post(name: .cafeVelozHideWidget, object: nil)
         }
         .onTapGesture(count: 1) {
@@ -74,17 +83,17 @@ struct CoffeeWidgetView: View {
                 }
                 guard let startMouse = dragStartMouse,
                       let startOrigin = dragStartOrigin else { return }
-                var newOrigin = CGPoint(
+                let unclampedOrigin = CGPoint(
                     x: startOrigin.x + (mouse.x - startMouse.x),
                     y: startOrigin.y + (mouse.y - startMouse.y)
                 )
+                var newOrigin = unclampedOrigin
                 if let screen = window.screen ?? NSScreen.main {
-                    let visible = screen.visibleFrame
-                    let size = window.frame.size
-                    newOrigin.x = min(max(newOrigin.x, visible.minX - size.width + 20),
-                                      visible.maxX - 20)
-                    newOrigin.y = min(max(newOrigin.y, visible.minY - size.height + 20),
-                                      visible.maxY - 20)
+                    newOrigin = WidgetPositioning.clamp(
+                        origin: unclampedOrigin,
+                        windowSize: window.frame.size,
+                        to: screen.visibleFrame
+                    )
                 }
                 window.setFrameOrigin(newOrigin)
             }

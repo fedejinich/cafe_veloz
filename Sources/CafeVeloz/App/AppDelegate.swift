@@ -100,19 +100,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func configureCoffeeWindow() {
-        let windowSize = NSSize(width: 180, height: 180)
-        let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(origin: .zero, size: windowSize)
-        let origin: CGPoint
-        if let x = UserDefaults.standard.object(forKey: "widgetX") as? CGFloat,
-           let y = UserDefaults.standard.object(forKey: "widgetY") as? CGFloat {
-            origin = CGPoint(x: x, y: y)
-        } else {
-            origin = CGPoint(x: screenFrame.midX - windowSize.width / 2,
-                             y: screenFrame.midY - windowSize.height / 2)
-        }
+        let windowSize = CGSize(width: 180, height: 180)
+        let origin = initialWidgetOrigin(for: windowSize)
 
         let window = NSWindow(
-            contentRect: NSRect(origin: origin, size: windowSize),
+            contentRect: CGRect(origin: origin, size: windowSize),
             styleMask: [.borderless],
             backing: .buffered,
             defer: false
@@ -128,6 +120,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window.orderFrontRegardless()
 
         coffeeWindow = window
+    }
+
+    private func initialWidgetOrigin(for windowSize: CGSize) -> CGPoint {
+        let fallbackFrame = NSScreen.main?.visibleFrame ?? CGRect(origin: .zero, size: windowSize)
+        let visibleFrames = NSScreen.screens.map(\.visibleFrame)
+
+        return WidgetPositioning.initialOrigin(
+            savedOrigin: savedWidgetOrigin(),
+            windowSize: windowSize,
+            availableFrames: visibleFrames,
+            fallbackFrame: fallbackFrame
+        )
+    }
+
+    private func savedWidgetOrigin() -> CGPoint? {
+        let defaults = UserDefaults.standard
+        guard defaults.object(forKey: "widgetX") != nil,
+              defaults.object(forKey: "widgetY") != nil else {
+            return nil
+        }
+
+        return CGPoint(
+            x: defaults.double(forKey: "widgetX"),
+            y: defaults.double(forKey: "widgetY")
+        )
     }
 
     private func bindHideNotification() {
